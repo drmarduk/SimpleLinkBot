@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"regexp"
 	"time"
 )
 
@@ -27,6 +28,19 @@ func RunMessageHandler() {
 
 	for {
 		msg := <-MessageHandlerChan
+		links := extractLinks(msg.Message)
 		log.Println("Message received: " + msg.String())
+		log.Println(links)
 	}
+}
+
+var regex *regexp.Regexp = regexp.MustCompile(`(https?|ftp)://(-\.)?([^\s/?\.#-]+\.?)+(/[^\s]*)?`)
+
+func extractLinks(src string) []string {
+
+	result := regex.FindAllString(src, -1)
+	if result == nil {
+		result = append(result, "no links :/")
+	}
+	return result
 }
