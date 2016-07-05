@@ -4,7 +4,6 @@ import (
 	"crypto/tls"
 	"log"
 	"os"
-	"time"
 
 	"github.com/quiteawful/qairc"
 )
@@ -23,7 +22,6 @@ func RunIrcHandler() {
 	}
 
 	for {
-		t1 = time.Now()
 		m, status := <-irc.Out
 		if !status {
 			irc.Reconnect()
@@ -40,8 +38,5 @@ func RunIrcHandler() {
 			message := NewMessage(m.Sender.Nick, msg)
 			message.Save()
 		}
-		t2 = time.Now()
-
-		log.Println("Took " + t2.Sub(t1).String())
 	}
 }

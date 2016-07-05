@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"time"
 
 	"github.com/quiteawful/qairc"
 )
@@ -11,8 +10,6 @@ var (
 	irc *qairc.Engine
 
 	MessageHandlerChan chan (*Message)
-
-	t1, t2 time.Time
 )
 
 func main() {
