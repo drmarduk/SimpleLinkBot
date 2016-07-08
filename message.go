@@ -25,19 +25,25 @@ func (m *Message) String() string {
 }
 
 func RunMessageHandler() {
-
 	for {
 		msg := <-MessageHandlerChan
 		links := extractLinks(msg.Message)
 		log.Println("Message received: " + msg.String())
 		log.Println(links)
+
+		for _, l := range links {
+			err := dbLinkSave(msg.User, l, msg.Timestamp)
+			if err != nil {
+				log.Println("RunMessageHandler: Error while inserting Link " + l)
+				continue
+			}
+		}
 	}
 }
 
 var regex *regexp.Regexp = regexp.MustCompile(`(https?|ftp)://(-\.)?([^\s/?\.#-]+\.?)+(/[^\s]*)?`)
 
 func extractLinks(src string) []string {
-
 	result := regex.FindAllString(src, -1)
 	if result == nil {
 		result = append(result, "no links :/")

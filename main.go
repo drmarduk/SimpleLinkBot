@@ -14,11 +14,12 @@ var (
 
 func main() {
 	log.Println("Start LinkBotSilent")
-
+	CheckDbTables()
 	MessageHandlerChan = make(chan (*Message))
 
 	go RunIrcHandler()
 	go RunMessageHandler()
+	go RunHttpHandler()
 
 	for {
 	}
