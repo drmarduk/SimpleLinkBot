@@ -21,7 +21,7 @@ func dbLinkSave(user, link string, timestamp time.Time) error {
 	}
 	defer db.Close()
 
-	query := "insert into links(user, link, date) values(?, ?, ?);"
+	query := "insert into links(id, user, link, date) values(null, ?, ?, ?);"
 	_, err = db.Exec(query, user, link, timestamp)
 	return nil
 }
@@ -60,7 +60,7 @@ func dbOpenLinks(offset, count int) []Message {
 
 func CheckDbTables() error {
 	var err error
-	query := "create table if not exists links(id int primary_key , user text, link text, date timestamp);"
+	query := "create table if not exists links(id integer primary key ,user text, link text, date timestamp);"
 
 	db, err = sql.Open("sqlite3", "database.db")
 	if err != nil {
