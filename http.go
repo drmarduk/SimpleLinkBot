@@ -10,7 +10,7 @@ import (
 func RunHttpHandler() {
 
 	http.HandleFunc("/", indexHandler)
-	http.ListenAndServe(":"+*flagPort, nil)
+	log.Fatal(http.ListenAndServe(":"+*flagPort, nil))
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {

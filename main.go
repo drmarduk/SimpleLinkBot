@@ -24,13 +24,18 @@ func main() {
 	flag.Parse()
 
 	log.Println("Start LinkBotSilent")
-	CheckDbTables()
+	err := CheckDbTables()
+	if err != nil {
+		log.Println("Main: Error while checking tables: " + err.Error())
+		return
+	}
 	MessageHandlerChan = make(chan (*Message))
 
-	go RunIrcHandler()
 	go RunMessageHandler()
-	go RunHttpHandler()
+	go RunIrcHandler()
+	RunHttpHandler()
 
-	for {
-	}
+	//for {
+	//	time.Sleep(3 * time.Second)
+	//}
 }

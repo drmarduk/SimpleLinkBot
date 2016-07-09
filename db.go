@@ -45,7 +45,6 @@ func dbOpenLinks(offset, count int) []Message {
 	}
 
 	for rows.Next() {
-		log.Println("asdf")
 		tmp := Message{}
 		err = rows.Scan(&tmp.Id, &tmp.User, &tmp.Link, &tmp.Timestamp)
 		if err != nil {
