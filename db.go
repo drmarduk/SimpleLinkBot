@@ -21,7 +21,7 @@ func dbLinkSave(user, link string, timestamp time.Time) error {
 	}
 	defer db.Close()
 
-	query := "insert into links(id, user, link, date) values(null, ?, ?, ?);"
+	query := "insert into links(user, link, date) values(?, ?, ?);"
 	_, err = db.Exec(query, user, link, timestamp)
 	return nil
 }

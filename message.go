@@ -30,8 +30,6 @@ func RunMessageHandler() {
 	for {
 		msg := <-MessageHandlerChan
 		links := extractLinks(msg.Message)
-		log.Println("Message received: " + msg.String())
-		log.Println(links)
 
 		for _, l := range links {
 			err := dbLinkSave(msg.User, l, msg.Timestamp)
@@ -39,6 +37,7 @@ func RunMessageHandler() {
 				log.Println("RunMessageHandler: Error while inserting Link " + l)
 				continue
 			}
+			log.Printf("%s: %s\n", msg.User, l)
 		}
 	}
 }
@@ -46,9 +45,5 @@ func RunMessageHandler() {
 var regex *regexp.Regexp = regexp.MustCompile(`(https?|ftp)://(-\.)?([^\s/?\.#-]+\.?)+(/[^\s]*)?`)
 
 func extractLinks(src string) []string {
-	result := regex.FindAllString(src, -1)
-	if result == nil {
-		result = append(result, "no links :/")
-	}
-	return result
+	return regex.FindAllString(src, -1)
 }
