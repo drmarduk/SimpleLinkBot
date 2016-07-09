@@ -21,9 +21,42 @@ func dbLinkSave(user, link string, timestamp time.Time) error {
 	}
 	defer db.Close()
 
-	query := "insert into links(user, link, date) values(?, ?, ?);"
+	query := "insert into links(id, user, link, date) values(null, ?, ?, ?);"
 	_, err = db.Exec(query, user, link, timestamp)
 	return nil
+}
+
+func dbOpenLinks(offset, count int) []Message {
+	var err error
+	var result []Message
+	query := "select id, user, link, date from links limit ?, ?;"
+
+	db, err := sql.Open("sqlite3", "database.db")
+	if err != nil {
+		log.Println("Error while selecting links: " + err.Error())
+		return nil
+	}
+	defer db.Close()
+
+	rows, err := db.Query(query, offset, count)
+	if err != nil {
+		log.Println("Error while query: " + err.Error())
+		return nil
+	}
+
+	for rows.Next() {
+		log.Println("asdf")
+		tmp := Message{}
+		err = rows.Scan(&tmp.Id, &tmp.User, &tmp.Link, &tmp.Timestamp)
+		if err != nil {
+			log.Println("dbOpenLinks: Scanning error: " + err.Error())
+			continue
+		}
+
+		result = append(result, tmp)
+	}
+
+	return result
 }
 
 func CheckDbTables() error {

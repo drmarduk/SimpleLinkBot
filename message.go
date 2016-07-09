@@ -7,8 +7,10 @@ import (
 )
 
 type Message struct {
+	Id        int
 	User      string
 	Message   string
+	Link      string
 	Timestamp time.Time
 }
 
