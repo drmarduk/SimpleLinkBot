@@ -5,15 +5,17 @@ import (
 	"log"
 	"os"
 
-	"github.com/quiteawful/qairc"
+	"github.com/drmarduk/qairc"
 )
 
 func RunIrcHandler() {
 
-	irc = qairc.QAIrc("Linky", "marduk")
-	irc.Address = "irc.quiteawful.net:6697"
-	irc.UseTLS = true
-	irc.TLSCfg = &tls.Config{InsecureSkipVerify: true}
+	irc = qairc.QAIrc(*flagNick, *flagUser)
+	irc.Address = *flagServer
+	if *flagTls {
+		irc.UseTLS = true
+		irc.TLSCfg = &tls.Config{InsecureSkipVerify: true}
+	}
 
 	err := irc.Run()
 	if err != nil {
@@ -28,7 +30,8 @@ func RunIrcHandler() {
 		}
 
 		if m.Type == "001" {
-			irc.Join("#g0")
+			irc.Join(*flagChan)
+			log.Println("got in " + *flagChan)
 		}
 
 		if m.Type == "PRIVMSG" {

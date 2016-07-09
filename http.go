@@ -10,7 +10,7 @@ import (
 func RunHttpHandler() {
 
 	http.HandleFunc("/", indexHandler)
-	http.ListenAndServe(":80", nil)
+	http.ListenAndServe(":"+*flagPort, nil)
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
